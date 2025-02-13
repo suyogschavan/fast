@@ -1,4 +1,3 @@
-# auth.py
 from fastapi import APIRouter, HTTPException
 from models import User
 from database import users_collection
@@ -20,5 +19,5 @@ def login(email: str, password: str):
     user = users_collection.find_one({"email": email})
     if not user or not verify_password(password, user["password"]):
         raise HTTPException(status_code=400, detail="Invalid credentials")
-    token = create_jwt({"user_id": str(user["_id"])})
+    token = create_jwt({"user_id": str(user["_id"]), "email": user["email"]})
     return {"token": token}
